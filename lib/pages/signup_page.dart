@@ -82,11 +82,11 @@ class _SignupPageState extends State<SignupPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              MyTextfield(hintText: "Enter your email", controller: email,),
+              MyTextfield(hintText: "Enter your email", controller: email,obscureText: false,),
               SizedBox(height: 10),
-              MyTextfield(hintText: "Enter your Username", controller: username,),
+              MyTextfield(hintText: "Enter your Username", controller: username,obscureText: false,),
               SizedBox(height: 10),
-              MyTextfield(hintText: "Enter your password", controller: password,),
+              MyTextfield(hintText: "Enter your password", controller: password,obscureText: false,),
               SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,

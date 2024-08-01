@@ -1,5 +1,6 @@
 
 import 'package:canteen_app/pages/login_page.dart';
+import 'package:canteen_app/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return const MenuPage();
+            return const MainPage();
           }else{
             return const LoginPage();
           }

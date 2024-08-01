@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            Center(
+            const Center(
 
               child: Text("Sign in to your food court",
                 style: TextStyle(
@@ -77,11 +77,13 @@ class _LoginPageState extends State<LoginPage> {
             MyTextfield(
               hintText: "Email",
               controller: _emailController,
+              obscureText: false,
             ),
             SizedBox(height: 15),
             MyTextfield(
               hintText: "Password",
               controller: _passwordController,
+              obscureText: true,
             ),
 
 
