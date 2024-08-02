@@ -1,22 +1,23 @@
-import 'package:canteen_app/model/my_drawer.dart';
-import 'package:canteen_app/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/my_drawer.dart';
 import 'menu_page.dart';
 import 'messages_page.dart';
+import 'profile_page.dart';
 
 class MainPage extends StatefulWidget {
   final int initialIndex;
   final String cardTitle;
   final String cardImagePath;
+  final double price;
 
   const MainPage({
     super.key,
     this.initialIndex = 0,
     this.cardTitle = '',
     this.cardImagePath = '',
+    this.price = 0,
   });
 
   @override
@@ -25,16 +26,24 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final user = FirebaseAuth.instance.currentUser;
-  int selectedIndex = 0;
+  late int selectedIndex;
 
   @override
   void initState() {
     super.initState();
     selectedIndex = widget.initialIndex;
+    if (selectedIndex == 1 && widget.cardTitle.isNotEmpty) {
+      _pages[1] = MessagesPage(
+        cardTitle: widget.cardTitle,
+        cardImagePath: widget.cardImagePath,
+        price: widget.price,
+      );
+    }
   }
+
   static final List<Widget> _pages = <Widget>[
     const MenuPage(),
-     MessagesPage(cardTitle: '', cardImagePath: ''),
+    MessagesPage(cardTitle: '', cardImagePath: '',price: 0,),
     const ProfilePage(),
   ];
 
@@ -50,13 +59,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Update MessagesPage with card data if initialIndex is 1
-    if (selectedIndex == 1 && widget.cardTitle.isNotEmpty) {
-      _pages[1] = MessagesPage(
-        cardTitle: widget.cardTitle,
-        cardImagePath: widget.cardImagePath,
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

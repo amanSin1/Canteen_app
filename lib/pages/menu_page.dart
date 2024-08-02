@@ -1,8 +1,11 @@
+import 'package:canteen_app/pages/product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/my_drawer.dart';
+import 'build_menu_item_page.dart';
 import 'main_page.dart';
+
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -13,6 +16,17 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final user = FirebaseAuth.instance.currentUser;
 
+  void navigateToMessagesPage(String title, String imagePath, double price) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => MainPage(
+        initialIndex: 1,
+        cardTitle: title,
+        cardImagePath: imagePath,
+        price: price,
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +35,18 @@ class _MenuPageState extends State<MenuPage> {
         child: Column(
           children: [
             Center(
-              child: Text("Menu", style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-              ),),
+              child: Text(
+                "Menu",
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 30),
             TextField(
               decoration: InputDecoration(
-                hintText: " Search your food",
+                hintText: "Search your food",
                 suffixIcon: Icon(Icons.search),
                 fillColor: Colors.grey[200],
                 border: OutlineInputBorder(
@@ -43,68 +60,35 @@ class _MenuPageState extends State<MenuPage> {
             ),
             const SizedBox(height: 20.0),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 30,
-                mainAxisSpacing: 20,
-                children: [
-                  buildMenuItem(context, 'Biryani', 'assets/images/biryani.png'),
-                  buildMenuItem(context, 'Burger', 'assets/images/burger.png'),
-                  buildMenuItem(context, 'Cold Drink', 'assets/images/cold_drink.png'),
-                  buildMenuItem(context, 'Fries', 'assets/images/fries.png'),
-                  buildMenuItem(context, 'Ice-cream', 'assets/images/ice_cream.png'),
-                  buildMenuItem(context, 'Pizza', 'assets/images/pizza.png'),
-                ],
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 30,
+                  mainAxisSpacing: 20,
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  final title = product['title'] as String?;
+                  final imagePath = product['imagePath'] as String?;
+                  final price = product['price'] as double?;
+
+                  if (title == null || imagePath == null || price == null) {
+                    return SizedBox(); // or handle the error appropriately
+                  }
+
+                  return GestureDetector(
+                    onTap: () => navigateToMessagesPage(title, imagePath, price),
+                    child: BuildMenuItemPage(
+                      title: title,
+                      imagePath: imagePath,
+                      price: price,
+                    ),
+                  );
+                },
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildMenuItem(BuildContext context, String title, String imagePath) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainPage(
-              initialIndex: 1,
-              cardTitle: title,
-              cardImagePath: imagePath,
-            ),
-          ),
-        );
-      },
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(60.0),
-        ),
-        elevation: 8,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                imagePath,
-                height: 90.0,
-                width: 90.0,
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
