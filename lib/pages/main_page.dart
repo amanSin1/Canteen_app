@@ -8,7 +8,16 @@ import 'menu_page.dart';
 import 'messages_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int initialIndex;
+  final String cardTitle;
+  final String cardImagePath;
+
+  const MainPage({
+    super.key,
+    this.initialIndex = 0,
+    this.cardTitle = '',
+    this.cardImagePath = '',
+  });
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -18,9 +27,14 @@ class _MainPageState extends State<MainPage> {
   final user = FirebaseAuth.instance.currentUser;
   int selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.initialIndex;
+  }
   static final List<Widget> _pages = <Widget>[
     const MenuPage(),
-    const MessagesPage(),
+     MessagesPage(cardTitle: '', cardImagePath: ''),
     const ProfilePage(),
   ];
 
@@ -36,6 +50,13 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Update MessagesPage with card data if initialIndex is 1
+    if (selectedIndex == 1 && widget.cardTitle.isNotEmpty) {
+      _pages[1] = MessagesPage(
+        cardTitle: widget.cardTitle,
+        cardImagePath: widget.cardImagePath,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
