@@ -1,3 +1,4 @@
+import 'package:canteen_app/pages/details_page.dart';
 import 'package:canteen_app/pages/product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,7 @@ class _MenuPageState extends State<MenuPage> {
 
   void navigateToMessagesPage(String title, String imagePath, double price) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => MainPage(
-        initialIndex: 1,
+      builder: (context) => DetailsPage(
         cardTitle: title,
         cardImagePath: imagePath,
         price: price,

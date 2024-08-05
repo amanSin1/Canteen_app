@@ -2,23 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/my_drawer.dart';
+import 'cart_page.dart';
 import 'menu_page.dart';
-import 'messages_page.dart';
 import 'profile_page.dart';
 
 class MainPage extends StatefulWidget {
-  final int initialIndex;
-  final String cardTitle;
-  final String cardImagePath;
-  final double price;
-
-  const MainPage({
-    super.key,
-    this.initialIndex = 0,
-    this.cardTitle = '',
-    this.cardImagePath = '',
-    this.price = 0,
-  });
+  const MainPage({super.key});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -26,24 +15,16 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final user = FirebaseAuth.instance.currentUser;
-  late int selectedIndex;
+  late int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    selectedIndex = widget.initialIndex;
-    if (selectedIndex == 1 && widget.cardTitle.isNotEmpty) {
-      _pages[1] = MessagesPage(
-        cardTitle: widget.cardTitle,
-        cardImagePath: widget.cardImagePath,
-        price: widget.price,
-      );
-    }
   }
 
   static final List<Widget> _pages = <Widget>[
     const MenuPage(),
-    MessagesPage(cardTitle: '', cardImagePath: '',price: 0,),
+    const CartPage(),
     const ProfilePage(),
   ];
 
@@ -53,7 +34,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  signOut() async {
+  Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -71,7 +52,7 @@ class _MainPageState extends State<MainPage> {
         children: _pages,
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.grey, width: 1.0),
           ),
@@ -82,15 +63,15 @@ class _MainPageState extends State<MainPage> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home, color: Colors.red),
-              label: 'Home',
+              label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.mail, color: Colors.red),
-              label: 'Messages',
+              icon: Icon(Icons.shopping_cart, color: Colors.red),
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person, color: Colors.red),
-              label: 'Profile',
+              label: '',
             ),
           ],
         ),
