@@ -1,4 +1,9 @@
+// detailspage.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import '../model/cart_provider.dart';
 
 class DetailsPage extends StatefulWidget {
   final String cardTitle;
@@ -42,13 +47,6 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
-  void _add() {
-    // Implement your pay functionality here
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Added to cart Successfully!')),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +75,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                         Spacer(),
-                        Icon(Icons.delete),
+
                       ],
                     ),
                     Row(
@@ -122,7 +120,16 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    onPressed: _add,
+                    onPressed: (){
+                      Provider.of<CartProvider>(context, listen: false).addProduct({
+                        'title': widget.cardTitle,
+                        'imagePath': widget.cardImagePath,
+                        'price': widget.price,
+                        'quantity': quantity,
+                        'totalPrice': totalPrice,
+                      });
+                      Get.snackbar('Success', 'Product added to cart');
+                    },
                     child: Text('Add to my Order'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
