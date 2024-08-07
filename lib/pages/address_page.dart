@@ -1,6 +1,7 @@
 import 'package:canteen_app/pages/payment_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../model/razorpay_payment.dart';
 import 'address_page_textfield.dart';
 
 class AddressPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _AddressPageState extends State<AddressPage> {
 
       // Optionally, show a success message or navigate to another page
       print('Address saved successfully!');
-      Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RazorPayPage()));
     } catch (e) {
       // Handle any errors that occur
       print('Failed to save address: $e');

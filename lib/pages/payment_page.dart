@@ -6,11 +6,22 @@ class PaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('payment'),
+        title: const Text('payment'),
       ),
       body: Center(
-        child: Text('payment page me aagye'),
-      ),
+        child: ElevatedButton(
+          onPressed: (){},
+          style: ElevatedButton.styleFrom(
+
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.red,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50,
+              vertical: 15,
+            ),
+          ), child: const Text("Pay"),
+        ),
+      )
     );
   }
 }
