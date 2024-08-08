@@ -16,10 +16,10 @@ class _RazorPayPageState extends State<RazorPayPage> {
   void openCheckout(int amount) async {
     amount = amount * 100; // Convert to smallest unit of currency (e.g., paise)
     var options = {
-      'key': 'rzp_test_1DP5mmOLF5G5ag',
+      'key': 'rzp_test_GcZZFDPP0jHtC4',
       'amount': amount,
-      'name': 'Geeks for Geek',
-      'prefill': {'contact': '1234567890', 'email': 'test@gmail.com'},
+      'name': 'Aman singh',
+      'prefill': {'contact': '9643593430', 'email': 'amanboe1@gmail.com'},
       'external': {
         'wallets': ['paytm']
       }
@@ -70,6 +70,9 @@ class _RazorPayPageState extends State<RazorPayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Payment gateway"),
+      ),
       backgroundColor: Colors.grey[800],
       body: SingleChildScrollView(
         child: Column(
@@ -125,7 +128,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text("Make payment"),
+                child: Text("Make payment",style : TextStyle(color: Colors.yellow,fontWeight: FontWeight.bold,fontSize: 20)),
               ),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             ),
