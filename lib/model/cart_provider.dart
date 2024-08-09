@@ -8,6 +8,7 @@ class CartProvider extends ChangeNotifier {
   void addProducts(List<Map<String, dynamic>> products) {
     _cartItems.addAll(products);
     notifyListeners();
+
   }
 
   void removeProduct(Map<String, dynamic> product) {
