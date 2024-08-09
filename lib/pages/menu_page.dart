@@ -17,7 +17,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final user = FirebaseAuth.instance.currentUser;
 
-  void navigateToMessagesPage(double id, String title, String imagePath, double price) {
+  void navigateToMessagesPage(int id, String title, String imagePath, double price) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => DetailsPage(
         id: id,
@@ -70,12 +70,12 @@ class _MenuPageState extends State<MenuPage> {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  final id = product['id'] as double?;
+                  final id = product['id'] as int;
                   final title = product['title'] as String?;
                   final imagePath = product['imagePath'] as String?;
-                  final price = product['price'] as double?;
+                  final price = product['price'];
 
-                  if (id == null || title == null || imagePath == null || price == null) {
+                  if (title == null || imagePath == null || price == null) {
                     // Handle error appropriately or skip this item
                     return SizedBox(); // Or use an error widget
                   }

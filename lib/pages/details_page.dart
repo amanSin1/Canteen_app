@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../model/cart_provider.dart';
 
 class DetailsPage extends StatefulWidget {
-  final double id;
+  final int id;
   final String cardTitle;
   final String cardImagePath;
   final double price;
@@ -56,14 +56,16 @@ class _DetailsPageState extends State<DetailsPage> {
 
     if (userId != null) {
       // Update the local cart state first
-      Provider.of<CartProvider>(context, listen: false).addProduct({
-        'id' : widget.id,
-        'title': widget.cardTitle,
-        'imagePath': widget.cardImagePath,
-        'price': widget.price,
-        'quantity': quantity,
-        'totalPrice': totalPrice,
-      });
+      Provider.of<CartProvider>(context, listen: false).addProducts([
+        {
+          'id': widget.id,
+          'title': widget.cardTitle,
+          'imagePath': widget.cardImagePath,
+          'price': widget.price,
+          'quantity': quantity,
+          'totalPrice': totalPrice,
+        }
+      ]);
 
       // Then save the item in Firestore under the user's cart
       final userCartCollection = FirebaseFirestore.instance

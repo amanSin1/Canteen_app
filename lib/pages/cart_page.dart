@@ -45,7 +45,7 @@ class _CartPageState extends State<CartPage> {
       }).toList();
 
       // Update CartProvider with fetched items
-      Provider.of<CartProvider>(context, listen: false).addProduct(cartItems as Map<String, dynamic>);
+      Provider.of<CartProvider>(context, listen: false).addProducts(cartItems);
     } catch (e) {
       print('Failed to fetch cart items: $e');
     }
@@ -71,25 +71,26 @@ class _CartPageState extends State<CartPage> {
     List<Map<String, dynamic>> addresses = await fetchAddresses(userId);
 
     if (addresses.isEmpty) {
-      Get.snackbar('No Addresses Found', 'Please add a delivery address.');
-    } else {
+      Get.snackbar('No Addresses Found', 'Please add a delivery address.'); }
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => SelectAddressPage(cartItems: cartItems, addresses: addresses),
         ),
       );
-    }
+
+
+
   }
 
-  void _removeFromCart(double itemId, Map<String, dynamic> product) async {
+  void _removeFromCart(String itemId, Map<String, dynamic> product) async {
     try {
       // Remove the item from Firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .collection('cart')
-          .doc(itemId.toString())
+          .doc(itemId as String?)
           .delete();
 
       // Remove from local provider
@@ -146,7 +147,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                       trailing: IconButton(
                         onPressed: () {
-                          _removeFromCart(product['id'], product);
+                          _removeFromCart(product['id'].toString(), product);
                         },
                         icon: Icon(Icons.delete, color: theme.colorScheme.error),
                       ),

@@ -1,4 +1,3 @@
-// model/cart_provider.dart
 import 'package:flutter/material.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -6,8 +5,8 @@ class CartProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> get cartItems => _cartItems;
 
-  void addProduct(Map<String, dynamic> product) {
-    _cartItems.add(product);
+  void addProducts(List<Map<String, dynamic>> products) {
+    _cartItems.addAll(products);
     notifyListeners();
   }
 

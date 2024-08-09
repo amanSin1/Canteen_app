@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BuildMenuItemPage extends StatelessWidget {
-  final double id;
+  final int id;
   final String title;
   final String imagePath;
   final double price;
