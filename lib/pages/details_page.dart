@@ -28,6 +28,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   int quantity = 1;
   late double totalPrice;
+  bool isLoading = false; // Declare isLoading
 
   @override
   void initState() {
@@ -51,6 +52,11 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
   void _addToCart() async {
+    setState(() {
+      isLoading = true;
+    });
+
+
     final user = FirebaseAuth.instance.currentUser;
     final userId = user?.uid;
 
@@ -88,6 +94,10 @@ class _DetailsPageState extends State<DetailsPage> {
       // If no user is signed in, show an error
       Get.snackbar('Error', 'You need to be signed in to add items to the cart');
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
 
@@ -164,14 +174,19 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    onPressed: _addToCart,
-                    child: Text('Add to my Order'),
+                    onPressed: isLoading ? null : _addToCart,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.orange,
                       padding: EdgeInsets.symmetric(
                           horizontal: 50, vertical: 15),
                     ),
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                      valueColor:
+                      AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                        : Text('Add to my Order'),
                   ),
                 ],
               ),

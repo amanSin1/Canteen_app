@@ -1,3 +1,4 @@
+import 'package:canteen_app/model/razorpay_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'address_page.dart'; // Import the AddressPage
@@ -69,9 +70,16 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: _selectedAddressIndex == -1 ? null : () {
-                // Handle deliver here action with the selected address
+              onPressed: _selectedAddressIndex == -1
+                  ? null
+                  : () {
+                // Navigate to the RazorPayPage
+                Get.to(() => RazorPayPage());
+
+                // Handle the "deliver here" action if needed
+                // Example: processSelectedAddress(_selectedAddressIndex);
               },
+
               child: Text("DELIVER HERE"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,

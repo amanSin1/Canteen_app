@@ -16,6 +16,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late String userId;
+  Map<String, bool> isLoadingMap = {};
 
   @override
   void initState() {
@@ -84,6 +85,11 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _removeFromCart(String itemId, Map<String, dynamic> product) async {
+    setState(() {
+      isLoadingMap[itemId] = true; // Start loading for the specific item
+    });
+
+
     try {
       // Remove the item from Firestore
       await FirebaseFirestore.instance
@@ -101,6 +107,10 @@ class _CartPageState extends State<CartPage> {
       print('Failed to remove item from cart: $e');
       Get.snackbar('Error', 'Failed to remove item from cart');
     }
+
+    setState(() {
+      isLoadingMap[itemId] = false; // Start loading for the specific item
+    });
   }
 
   @override
@@ -132,6 +142,8 @@ class _CartPageState extends State<CartPage> {
                   itemCount: cartItems.length,
                   itemBuilder: (context, index) {
                     final product = cartItems[index];
+                    final itemId = product['id'].toString();
+                    final isLoading = isLoadingMap[itemId] ?? false;
 
                     return ListTile(
                       leading: CircleAvatar(
@@ -145,11 +157,13 @@ class _CartPageState extends State<CartPage> {
                         'Quantity: ${product['quantity']} | Total: \$${product['totalPrice'].toStringAsFixed(2)}',
                         style: TextStyle(color: theme.colorScheme.onSurface),
                       ),
-                      trailing: IconButton(
+                      trailing: isLoading
+                          ? CircularProgressIndicator() // Show only for the specific item
+                          : IconButton(
                         onPressed: () {
-                          _removeFromCart(product['id'].toString(), product);
+                          _removeFromCart(itemId, product);
                         },
-                        icon: Icon(Icons.delete, color: theme.colorScheme.error),
+                        icon: Icon(Icons.delete, color: Colors.red),
                       ),
                     );
                   },
