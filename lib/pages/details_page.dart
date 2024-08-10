@@ -1,4 +1,3 @@
-// detailspage.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../model/cart_provider.dart';
+import 'cart_page.dart'; // Import your CartPage
 
 class DetailsPage extends StatefulWidget {
   final int id;
@@ -28,7 +28,8 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   int quantity = 1;
   late double totalPrice;
-  bool isLoading = false; // Declare isLoading
+  bool isLoading = false;
+  bool isAddedToCart = false; // New state variable
 
   @override
   void initState() {
@@ -51,55 +52,87 @@ class _DetailsPageState extends State<DetailsPage> {
       });
     }
   }
+
   void _addToCart() async {
+    if (isLoading) return;
+
     setState(() {
       isLoading = true;
     });
 
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final userId = user?.uid;
 
-    final user = FirebaseAuth.instance.currentUser;
-    final userId = user?.uid;
+      if (userId != null) {
+        final userCartCollection = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('cart');
 
-    if (userId != null) {
-      // Update the local cart state first
-      Provider.of<CartProvider>(context, listen: false).addProducts([
-        {
-          'id': widget.id,
-          'title': widget.cardTitle,
-          'imagePath': widget.cardImagePath,
-          'price': widget.price,
-          'quantity': quantity,
-          'totalPrice': totalPrice,
+        // Check for existing item
+        final existingCartItem = await userCartCollection
+            .where('id', isEqualTo: widget.id)
+            .limit(1)
+            .get();
+
+        if (existingCartItem.docs.isEmpty) {
+          // Add the item to Firestore if it's not already present
+          await userCartCollection.add({
+            'id': widget.id,
+            'title': widget.cardTitle,
+            'imagePath': widget.cardImagePath,
+            'price': widget.price,
+            'quantity': quantity,
+            'totalPrice': totalPrice,
+          });
+          Get.snackbar('Success', 'Product added to cart');
+        } else {
+          Get.snackbar('Info', 'Item is already in the cart');
         }
-      ]);
 
-      // Then save the item in Firestore under the user's cart
-      final userCartCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('cart');
+        // Add to local cart state
+        // Provider.of<CartProvider>(context, listen: false).addProducts([
+        //   {
+        //     'id': widget.id,
+        //     'title': widget.cardTitle,
+        //     'imagePath': widget.cardImagePath,
+        //     'price': widget.price,
+        //     'quantity': quantity,
+        //     'totalPrice': totalPrice,
+        //   }
+        // ]);
 
-      await userCartCollection.add({
-        'id' : widget.id,
-        'title': widget.cardTitle,
-        'imagePath': widget.cardImagePath,
-        'price': widget.price,
-        'quantity': quantity,
-        'totalPrice': totalPrice,
+
+      }
+
+
+      setState(() {
+        isAddedToCart = true;
       });
-
-      // Provide feedback to the user
-      Get.snackbar('Success', 'Product added to cart');
-    } else {
-      // If no user is signed in, show an error
-      Get.snackbar('Error', 'You need to be signed in to add items to the cart');
+    } catch (error) {
+      Get.snackbar('Error', 'Failed to add product to cart. Please try again.');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
+  @override
+  void dispose() {
+    // Reset state when navigating away
+    isLoading = false;
+    isAddedToCart = false;
+    super.dispose();
+  }
+
+
+
+
+  void _goToCart() {
+    Get.to(() => CartPage());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +162,6 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                         Spacer(),
-
                       ],
                     ),
                     Row(
@@ -174,7 +206,11 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    onPressed: isLoading ? null : _addToCart,
+                    onPressed: isLoading
+                        ? null
+                        : isAddedToCart
+                        ? _goToCart
+                        : _addToCart,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.orange,
@@ -186,7 +222,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       valueColor:
                       AlwaysStoppedAnimation<Color>(Colors.white),
                     )
-                        : Text('Add to my Order'),
+                        : Text(isAddedToCart ? 'Go to Cart' : 'Add to my Order'),
                   ),
                 ],
               ),
