@@ -15,7 +15,6 @@ class SelectAddressPage extends StatefulWidget {
 
 class _SelectAddressPageState extends State<SelectAddressPage> {
   int _selectedAddressIndex = -1; // To keep track of the selected address
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
