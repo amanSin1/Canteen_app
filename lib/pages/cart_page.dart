@@ -46,7 +46,9 @@ class _CartPageState extends State<CartPage> {
       }).toList();
 
       // Update CartProvider with fetched items
-      Provider.of<CartProvider>(context, listen: false).addProducts(cartItems);
+      Provider.of<CartProvider>(context, listen: false).cartItems.forEach((item) {
+        Provider.of<CartProvider>(context, listen: false).addProduct(item);
+      });
     } catch (e) {
       print('Failed to fetch cart items: $e');
     }

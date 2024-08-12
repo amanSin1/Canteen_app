@@ -53,6 +53,72 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
+  // void _addToCart() async {
+  //   if (isLoading) return;
+  //
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //
+  //   try {
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     final userId = user?.uid;
+  //
+  //     if (userId != null) {
+  //       final userCartCollection = FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(userId)
+  //           .collection('cart');
+  //
+  //       // Check for existing item
+  //       final existingCartItem = await userCartCollection
+  //           .where('id', isEqualTo: widget.id)
+  //           .limit(1)
+  //           .get();
+  //
+  //       if (existingCartItem.docs.isEmpty) {
+  //         // Add the item to Firestore if it's not already present
+  //         await userCartCollection.add({
+  //           'id': widget.id,
+  //           'title': widget.cardTitle,
+  //           'imagePath': widget.cardImagePath,
+  //           'price': widget.price,
+  //           'quantity': quantity,
+  //           'totalPrice': totalPrice,
+  //         });
+  //         Get.snackbar('Success', 'Product added to cart');
+  //       } else {
+  //         Get.snackbar('Info', 'Item is already in the cart');
+  //       }
+  //
+  //      // Add to local cart state
+  //      //  Provider.of<CartProvider>(context, listen: false).addProducts([
+  //      //    {
+  //      //      'id': widget.id,
+  //      //      'title': widget.cardTitle,
+  //      //      'imagePath': widget.cardImagePath,
+  //      //      'price': widget.price,
+  //      //      'quantity': quantity,
+  //      //      'totalPrice': totalPrice,
+  //      //    }
+  //      //  ]);
+  //
+  //
+  //     }
+  //
+  //
+  //     setState(() {
+  //       isAddedToCart = true;
+  //     });
+  //   } catch (error) {
+  //     Get.snackbar('Error', 'Failed to add product to cart. Please try again.');
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
+
   void _addToCart() async {
     if (isLoading) return;
 
@@ -70,7 +136,7 @@ class _DetailsPageState extends State<DetailsPage> {
             .doc(userId)
             .collection('cart');
 
-        // Check for existing item
+        // Check for existing item in Firestore
         final existingCartItem = await userCartCollection
             .where('id', isEqualTo: widget.id)
             .limit(1)
@@ -87,29 +153,24 @@ class _DetailsPageState extends State<DetailsPage> {
             'totalPrice': totalPrice,
           });
           Get.snackbar('Success', 'Product added to cart');
+
+          // Add to local cart state
+          Provider.of<CartProvider>(context, listen: false).addProduct({
+            'id': widget.id,
+            'title': widget.cardTitle,
+            'imagePath': widget.cardImagePath,
+            'price': widget.price,
+            'quantity': quantity,
+            'totalPrice': totalPrice,
+          });
         } else {
           Get.snackbar('Info', 'Item is already in the cart');
         }
 
-        // Add to local cart state
-        // Provider.of<CartProvider>(context, listen: false).addProducts([
-        //   {
-        //     'id': widget.id,
-        //     'title': widget.cardTitle,
-        //     'imagePath': widget.cardImagePath,
-        //     'price': widget.price,
-        //     'quantity': quantity,
-        //     'totalPrice': totalPrice,
-        //   }
-        // ]);
-
-
+        setState(() {
+          isAddedToCart = true;
+        });
       }
-
-
-      setState(() {
-        isAddedToCart = true;
-      });
     } catch (error) {
       Get.snackbar('Error', 'Failed to add product to cart. Please try again.');
     } finally {
@@ -131,8 +192,17 @@ class _DetailsPageState extends State<DetailsPage> {
 
 
   void _goToCart() {
-    Get.to(() => CartPage());
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CartPage()),
+    ).then((_) {
+      // Reset state to allow adding more items after returning
+      setState(() {
+        // isAddedToCart = false;
+      });
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
