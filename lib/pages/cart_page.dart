@@ -18,6 +18,8 @@ class _CartPageState extends State<CartPage> {
   late String userId;
   Map<String, bool> isLoadingMap = {};
 
+
+
   @override
   void initState() {
     super.initState();
@@ -45,10 +47,13 @@ class _CartPageState extends State<CartPage> {
         'id': doc.id,
       }).toList();
 
+      // Clear the existing cart items in the provider to avoid duplicates
+      Provider.of<CartProvider>(context, listen: false).clearCart();
+
       // Update CartProvider with fetched items
-      Provider.of<CartProvider>(context, listen: false).cartItems.forEach((item) {
+      for (var item in cartItems) {
         Provider.of<CartProvider>(context, listen: false).addProduct(item);
-      });
+      }
     } catch (e) {
       print('Failed to fetch cart items: $e');
     }
