@@ -20,7 +20,7 @@ class BuildMenuItemPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      elevation: 5,
+      elevation: 7,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
