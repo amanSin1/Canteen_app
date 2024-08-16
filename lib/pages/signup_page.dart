@@ -18,23 +18,30 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController username = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Future<void> signup() async {
     try {
-      // Check if email and password are not empty
+      // Check if email, password, and username are not empty
       if (email.text.isEmpty || password.text.isEmpty || username.text.isEmpty) {
         Get.snackbar("Error", "Please fill in all fields.", snackPosition: SnackPosition.BOTTOM);
         return;
       }
 
+      // Create the user with email and password
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text,
         password: password.text,
       );
 
+      // Update the displayName for the user
+      await userCredential.user?.updateDisplayName(username.text);
+
+      // Reload the user to reflect the displayName update
+      await userCredential.user?.reload();
+
       // Log UID for debugging
       print("User UID: ${userCredential.user!.uid}");
 
+      // Save the user data in Firestore
       await _firestore.collection("Users").doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
         'email': email.text,
@@ -44,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
       // Log Firestore success
       print("Firestore document created successfully.");
 
+      // Navigate to the Wrapper screen
       Get.offAll(const Wrapper());
 
     } on FirebaseAuthException catch (e) {
@@ -70,6 +78,7 @@ class _SignupPageState extends State<SignupPage> {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

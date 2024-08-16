@@ -199,7 +199,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                         Text(
-                          '\$${totalPrice.toStringAsFixed(2)}',
+                          '₹${totalPrice.toStringAsFixed(2)}',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

@@ -47,7 +47,7 @@ class BuildMenuItemPage extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              '\$${price.toStringAsFixed(2)}',
+              '₹${price.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.grey[700],

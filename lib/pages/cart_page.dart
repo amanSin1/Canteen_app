@@ -161,7 +161,7 @@ class _CartPageState extends State<CartPage> {
                         style: TextStyle(color: theme.colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        'Quantity: ${product['quantity']} | Total: \$${product['totalPrice'].toStringAsFixed(2)}',
+                        'Quantity: ${product['quantity']} | Total: ₹${product['totalPrice'].toStringAsFixed(2)}',
                         style: TextStyle(color: theme.colorScheme.onSurface),
                       ),
                       trailing: isLoading
@@ -188,7 +188,7 @@ class _CartPageState extends State<CartPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                      'Total Price: ₹${totalPrice.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

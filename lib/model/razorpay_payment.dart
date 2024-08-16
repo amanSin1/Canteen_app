@@ -14,7 +14,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   TextEditingController amtController = TextEditingController();
 
   void openCheckout(int amount) async {
-    amount = amount * 100; // Convert to smallest unit of currency (e.g., paise)
+    amount = amount * 100;
     var options = {
       'key': 'rzp_test_GcZZFDPP0jHtC4',
       'amount': amount,
