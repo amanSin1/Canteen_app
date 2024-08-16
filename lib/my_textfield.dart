@@ -8,6 +8,7 @@ class MyTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextFormField(
       obscureText: obscureText,
       controller: controller,
@@ -15,9 +16,9 @@ class MyTextfield extends StatelessWidget {
         hintText: hintText,
 
         filled: true,
-        fillColor: Colors.grey[200],
+        fillColor: theme.colorScheme.tertiary,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(20.0),
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0),

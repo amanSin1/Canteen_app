@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+
+
   Future<void> signIn() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -56,10 +58,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return  Scaffold(
+
       body: Container(
+
         padding: EdgeInsets.all(16),
-        color: Colors.white,
+        color: theme.colorScheme.primary,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
 
@@ -97,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                     foregroundColor: Colors.teal,
                     textStyle: TextStyle(fontSize: 16.0),
                   ),
-                  child: Text('Forget password?'),
+                  child: Text('Forget password?',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
@@ -123,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     TextSpan(
                       text: "Don't have an account? ",
-                      style: TextStyle(color: Colors.teal, fontSize: 16.0),
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
                     ),
                     TextSpan(
                       text: "Sign Up now",

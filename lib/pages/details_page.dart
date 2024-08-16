@@ -53,71 +53,6 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
-  // void _addToCart() async {
-  //   if (isLoading) return;
-  //
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //
-  //   try {
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     final userId = user?.uid;
-  //
-  //     if (userId != null) {
-  //       final userCartCollection = FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(userId)
-  //           .collection('cart');
-  //
-  //       // Check for existing item
-  //       final existingCartItem = await userCartCollection
-  //           .where('id', isEqualTo: widget.id)
-  //           .limit(1)
-  //           .get();
-  //
-  //       if (existingCartItem.docs.isEmpty) {
-  //         // Add the item to Firestore if it's not already present
-  //         await userCartCollection.add({
-  //           'id': widget.id,
-  //           'title': widget.cardTitle,
-  //           'imagePath': widget.cardImagePath,
-  //           'price': widget.price,
-  //           'quantity': quantity,
-  //           'totalPrice': totalPrice,
-  //         });
-  //         Get.snackbar('Success', 'Product added to cart');
-  //       } else {
-  //         Get.snackbar('Info', 'Item is already in the cart');
-  //       }
-  //
-  //      // Add to local cart state
-  //      //  Provider.of<CartProvider>(context, listen: false).addProducts([
-  //      //    {
-  //      //      'id': widget.id,
-  //      //      'title': widget.cardTitle,
-  //      //      'imagePath': widget.cardImagePath,
-  //      //      'price': widget.price,
-  //      //      'quantity': quantity,
-  //      //      'totalPrice': totalPrice,
-  //      //    }
-  //      //  ]);
-  //
-  //
-  //     }
-  //
-  //
-  //     setState(() {
-  //       isAddedToCart = true;
-  //     });
-  //   } catch (error) {
-  //     Get.snackbar('Error', 'Failed to add product to cart. Please try again.');
-  //   } finally {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
 
   void _addToCart() async {
     if (isLoading) return;
@@ -225,15 +160,18 @@ class _DetailsPageState extends State<DetailsPage> {
                     Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(20.0),
                           child: Image.asset(
                             widget.cardImagePath,
-                            height: 70,
+                           // fit: BoxFit.cover,
+                           // width: double.infinity,
+                            height: 220,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
